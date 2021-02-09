@@ -1,100 +1,44 @@
 const Engine = Matter.Engine;
 const World= Matter.World;
 const Bodies = Matter.Bodies;
-const Constraint = Matter.Constraint;
-var score = 0;
-var particle;
-var gameState;
 
-var engine, world;
-function preload() {
-    }
+var particles=[]
+var plinkos=[]
+var divisions=[]
+var divisionHeight=[]
 
-function setup(){
-    var canvas = createCanvas(800,400);
-    engine = Engine.create();
-    world = engine.world;
+function setup() {
 
-    stand= new Stand(340,500,100,20);
-   
-     block1= new Blocks(120,275,30,40);
-     block2= new Blocks(150,275,30,40);
-     block3= new Blocks(180,275,30,40);
-     block4= new Blocks(210,275,30,40);
-     block5= new Blocks(240,275,30,40); 
-     block6= new Blocks(270,275,30,40);
-     block7= new Blocks(300,275,40);
-
-     block8= new Blocks(330,235,30,40);
-     block9= new Blocks(360,235,30,40);
-     block10= new Blocks(390,235,30,40);
-     block11= new Blocks(420,235,30,40);
-     block12= new Blocks(450,235,30,40);
-
-     block13= new Blocks(360,195,30,40);
-     block14= new Blocks(390,195,30,40);
-     block15= new Blocks(420,195,30,40);
-
-     block16= new Blocks(390,155,30,40);
-
-     polygon= new Polygon(200,100,50,50);
 }
 
-function draw(){
-    background(0);
+var ground1 = new Ground(700,height,800,20);
+var divison =new Divisons(30,200,20,400)
 
-    noStroke();
-    textSize(35);
-    fill("white");
-    text("Score" + score, width-300, 50);
+function draw() {
+  createCanvas(800,400);
 
-    Engine.update(engine);
+  background(0);
 
-    stand.display();
-    block1.display();
-    block2.display();
-    block3.display();
-    block4.display();
-    block5.display();
-    block6.display();
-    block7.display();
+  for(var i=0;i<=width;i=i+80){
+    divisions.push(new Divisons(i,height-divisionHeight/2,10,divisionHeight));
+  }
 
-    block8.display();
-    block9.display();
-    block10.display();
-    block11.display();
-    block12.display();
 
-    block13.display();
-    block14.display();
-    block15.display();
-    block16.display();
+  for(var i=40;i<=width;i=i+50){
+    plinkos.push(new Plinko(i,75));
+  }
+  for(var i=15;i<=width-10;i=i+50){
+    plinkos.push(new Plinko(i,175));
+  }
 
-    polygon.display();
+  for(var i=0;i<particles.length;i++){
+    particles.display();
+  }
+
+
+  for(var i=0;i<divisions.length;i++){
+    divisons.display();
+  }
+  ground1.display();
+  divison.display();
 }
-function mouseDragged(){
-    Matter.Body.setPosition(polygon.body, {x: mouseX , y: mouseY});
-}
-
-
-function mouseReleased(){
-    Polygon.fly();
-}
-function keyPressed(){
-    if(keyCode === 32){
-        sling.attach(polygon);
-    }
-}
-async function getBackgroundImg(){
-    var response = await fetch("http://worldtimeapi.org/api/timezone/Asia/Kolkata");
-    var responseJSON = await response.json();
-
-    var datetime = responseJSON.datetime;
-    var hour = datetime.slice(11,13);
-    
-    if(hour>=0600 && hour<=1900){
-         background("yellow");
-    }
-    else
-         background(0);
-    }
